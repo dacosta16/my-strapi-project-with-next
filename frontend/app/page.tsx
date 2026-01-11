@@ -1,8 +1,8 @@
 import { HeroSection } from "@/components/hero-section";
-import { getHomePageData } from "@/lib/strapi";
+import { getHomePage } from "@/lib/strapi";
 
 export async function generateMetadata() {
-  const strapiData = await getHomePageData();
+  const strapiData = await getHomePage();
   return {
     title: strapiData?.title || "My Strapi Site",
     description: strapiData?.description || "Welcome to my Strapi powered website",
@@ -11,7 +11,7 @@ export async function generateMetadata() {
 
 export default async function Home() {
 
-  const strapiData = await getHomePageData();
+  const strapiData = await getHomePage();
 
   const { title, description } = strapiData;
   const [heroSection] = strapiData?.sections || [];
