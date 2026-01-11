@@ -30,17 +30,9 @@ export async function getHomePage() {
 }
 
 export async function getStrapiData(url: string) {
-  console.log("[v0] STRAPI_BASE_URL:", STRAPI_BASE_URL)
-  console.log("[v0] getStrapiData URL:", url)
-
   try {
     const cleanUrl = url.startsWith("/") ? url : `/${url}`
     const fullUrl = `${STRAPI_BASE_URL}${cleanUrl}`
-
-    console.log("[v0] Full URL being fetched:", fullUrl)
-
-    const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
 
     const response = await fetch(fullUrl, {
       method: "GET",
@@ -48,22 +40,14 @@ export async function getStrapiData(url: string) {
         "Content-Type": "application/json",
       },
       cache: "no-store",
-      signal: controller.signal,
     })
-
-    clearTimeout(timeoutId)
-
-    console.log("[v0] Response status:", response.status)
-    console.log("[v0] Response ok:", response.ok)
 
     if (!response.ok) {
       const errorText = await response.text()
-      console.error("[v0] Error response body:", errorText)
       throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`)
     }
 
     const data = await response.json()
-    console.log("[v0] Data received successfully")
     return data
   } catch (error) {
     console.error("[v0] Error fetching data:", error)
